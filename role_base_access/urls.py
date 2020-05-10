@@ -1,6 +1,6 @@
 from django.urls import path
 
-from role_base_access.views import RolesView, UserView, UserRolesView, ResourceView, RoleResourceActionView
+from role_base_access.views import RolesView, UserView, UserRolesView, ResourceView, RoleResourceActionView, PermissionCheck
 
 app_name = 'role_base_access'
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
     path('user_role',  UserRolesView.as_view()),
     path('resource',  ResourceView.as_view()),
     path('role_resource_action',  RoleResourceActionView.as_view()),
+    path('is_allowed',  PermissionCheck.as_view()),
 ]

@@ -109,3 +109,20 @@ class RoleResourceActionView(APIView):
         resources = RoleResourceAction.objects.all()
         serializer = RoleResourceActionSerializer(resources, many=True)
         return Response(serializer.data)
+
+
+class PermissionCheck(APIView):
+    def get(self, request, format=None):
+        data = request.data
+        user_id = data.get('role_id', -1)
+        resource_id = data.get('resource_id', -1)
+        action = data.get('action', '')
+        roles_allowed = utils.get_role_for_given_action_and_resource(
+            resource_id, action)
+        q = UserRoles.objects.filter(
+            user_role_id__in=roles_allowed, role_user_id=user_id)
+        if len(q) > 0:
+            response = {'access': 'granted'}
+        else:
+            response = {'access': 'denied'}
+        return Response(response)
